@@ -12,21 +12,27 @@ jobs:
           repository: mapstruct/mapstruct
           path: mapstruct
 
-      - name: Set up Java 11
+      - name: Set up Java 21 (compile)
         uses: actions/setup-java@v4
         with:
-          java-version: '11'
+          java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Compile MapStruct
+      - name: Compile MapStruct with Java 21
         run: |
           cd mapstruct
           mvn clean install -DskipTests -pl processor -am \
             -Dlicense.skip=true \
             -Danimal.sniffer.skip=true \
-            -Dcheckstyle.version=9.3 \
-            -Dpuppycrawl.version=9.3
+            -Dmaven.compiler.source=11 \
+            -Dmaven.compiler.target=11
+
+      - name: Set up Java 11 (NonDex)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
 
       - name: Run test normally (Expected PASS)
         run: |
