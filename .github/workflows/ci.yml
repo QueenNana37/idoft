@@ -12,23 +12,23 @@ jobs:
           repository: mapstruct/mapstruct
           path: mapstruct
 
-      - name: Set up Java 21 (compile)
+      - name: Set up Java 21 (for compiling)
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Compile MapStruct with Java 21
+      - name: Compile MapStruct old commit with Java 21
         run: |
           cd mapstruct
+          git checkout 26c5bcd923c7206ad161e93237f841a79ca85efd
           mvn clean install -DskipTests -pl processor -am \
             -Dlicense.skip=true \
             -Danimal.sniffer.skip=true \
-            -Dmaven.compiler.source=11 \
-            -Dmaven.compiler.target=11
+            -Dcheckstyle.skip=true
 
-      - name: Set up Java 11 (NonDex)
+      - name: Set up Java 11 (for NonDex)
         uses: actions/setup-java@v4
         with:
           java-version: '11'
@@ -39,7 +39,8 @@ jobs:
           cd mapstruct
           mvn -pl processor test \
             -Dtest=org.mapstruct.ap.test.conversion.java8time.Java8TimeConversionTest#testLocalTimeToString \
-            -Dlicense.skip=true
+            -Dlicense.skip=true \
+            -Dcheckstyle.skip=true
 
       - name: Run test with NonDex (Expected FAIL)
         continue-on-error: true
