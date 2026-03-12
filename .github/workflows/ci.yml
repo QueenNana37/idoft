@@ -49,3 +49,12 @@ jobs:
           mvn -pl processor edu.illinois:nondex-maven-plugin:2.1.1:nondex \
             -Dtest=org.mapstruct.ap.test.conversion.java8time.Java8TimeConversionTest#testLocalTimeToString \
             -DnondexRuns=10
+
+      - name: Checkout MapStruct
+        uses: actions/checkout@v4
+        with:
+          repository: mapstruct/mapstruct
+          path: mapstruct
+          fetch-depth: 0
+
+
