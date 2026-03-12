@@ -38,3 +38,13 @@ jobs:
           mvn -pl processor edu.illinois:nondex-maven-plugin:2.1.1:nondex \
             -Dtest=org.mapstruct.ap.test.conversion.java8time.Java8TimeConversionTest#testLocalTimeToString \
             -DnondexRuns=10
+
+
+- name: Compile MapStruct with Java 11
+        run: |
+          cd mapstruct
+          git checkout 26c5bcd923c7206ad161e93237f841a79ca85efd
+          mvn clean install -DskipTests -pl processor -am \
+            -Dlicense.skip=true \
+            -Danimal.sniffer.skip=true \
+            -Dcheckstyle.skip=true
