@@ -18,17 +18,17 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
-      - name: Compile commit 38ec5c53 with Java 21
+      - name: Compile first commit of test file (6cd96fcb) with Java 21
         run: |
           cd mapstruct
-          git checkout 38ec5c53
+          git checkout 6cd96fcb
           mvn clean install -DskipTests -pl processor -am -Dlicense.skip=true -Danimal.sniffer.skip=true -Dcheckstyle.skip=true
       - name: Set up Java 11 (for NonDex)
         uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'temurin'
-      - name: Run NonDex on 38ec5c53 (should PASS if this is before flakiness)
+      - name: Run NonDex on 6cd96fcb (was it flaky from day one?)
         run: |
           cd mapstruct
           mvn -pl processor edu.illinois:nondex-maven-plugin:2.1.1:nondex -Dtest=org.mapstruct.ap.test.conversion.java8time.Java8TimeConversionTest#testLocalTimeToString -DnondexRuns=10
