@@ -18,37 +18,17 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
-      - name: Compile BEFORE commit (23f48023) with Java 21
+      - name: Compile commit 38ec5c53 with Java 21
         run: |
           cd mapstruct
-          git checkout 23f48023
+          git checkout 38ec5c53
           mvn clean install -DskipTests -pl processor -am -Dlicense.skip=true -Danimal.sniffer.skip=true -Dcheckstyle.skip=true
       - name: Set up Java 11 (for NonDex)
         uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'temurin'
-      - name: Run NonDex on BEFORE commit (should PASS)
-        run: |
-          cd mapstruct
-          mvn -pl processor edu.illinois:nondex-maven-plugin:2.1.1:nondex -Dtest=org.mapstruct.ap.test.conversion.java8time.Java8TimeConversionTest#testLocalTimeToString -DnondexRuns=10
-      - name: Set up Java 21 again (for compiling)
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-      - name: Compile AFTER commit (4d9894ba) with Java 21
-        run: |
-          cd mapstruct
-          git checkout 4d9894ba
-          mvn clean install -DskipTests -pl processor -am -Dlicense.skip=true -Danimal.sniffer.skip=true -Dcheckstyle.skip=true
-      - name: Set up Java 11 again (for NonDex)
-        uses: actions/setup-java@v4
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-      - name: Run NonDex on AFTER commit (should FAIL)
-        continue-on-error: true
+      - name: Run NonDex on 38ec5c53 (should PASS if this is before flakiness)
         run: |
           cd mapstruct
           mvn -pl processor edu.illinois:nondex-maven-plugin:2.1.1:nondex -Dtest=org.mapstruct.ap.test.conversion.java8time.Java8TimeConversionTest#testLocalTimeToString -DnondexRuns=10
